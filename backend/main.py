@@ -3,12 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Body
 import logging, os
 from dotenv import load_dotenv
-from .llm_interface import LLMWrapper
-from .nlu import parse as nlu_parse
+from llm_interface import LLMWrapper
+from nlu import parse as nlu_parse
 
-from .tools import get_pois, get_city_geocode, get_weather, get_route, convert_currency, get_country_info, get_public_holidays, TOOL_MODE
+from tools import get_pois, get_city_geocode, get_weather, get_route, convert_currency, get_country_info, get_public_holidays, TOOL_MODE
 
-from .planner import plan_itinerary
+from planner import plan_itinerary
 
 load_dotenv()
 
