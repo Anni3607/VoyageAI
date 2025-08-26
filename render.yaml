@@ -1,0 +1,16 @@
+# render.yaml — template for Render.com (replace env with your values)
+services:
+  - type: web
+    name: voyagerai-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: TOOL_MODE
+        value: "mock" # set to live when providing keys
+      - key: LLM_BACKEND
+        value: "stub"
+      - key: OPENAI_API_KEY
+        value: ""
+      - key: OPENTRIPMAP_KEY
+        value: ""
