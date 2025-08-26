@@ -1,0 +1,7 @@
+
+fastapi
+uvicorn
+python-dotenv
+sqlmodel
+requests
+pydantic>=2
