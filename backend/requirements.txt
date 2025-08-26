@@ -11,3 +11,4 @@ python-dateutil
 fpdf2
 
 python-telegram-bot==20.5
+gunicorn
