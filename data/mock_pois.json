@@ -1,0 +1,226 @@
+{
+  "Goa": [
+    {
+      "name": "Baga Beach",
+      "tags": [
+        "beach",
+        "water sports"
+      ],
+      "popularity": 95,
+      "notes": "Lively beach with shacks"
+    },
+    {
+      "name": "Calangute Beach",
+      "tags": [
+        "beach"
+      ],
+      "popularity": 92,
+      "notes": "Popular golden-sand beach"
+    },
+    {
+      "name": "Fort Aguada",
+      "tags": [
+        "history",
+        "architecture"
+      ],
+      "popularity": 90,
+      "notes": "17th-century Portuguese fort"
+    },
+    {
+      "name": "Candolim Beach",
+      "tags": [
+        "beach"
+      ],
+      "popularity": 85,
+      "notes": "Quieter than Baga"
+    },
+    {
+      "name": "Anjuna Flea Market",
+      "tags": [
+        "shopping",
+        "cafes"
+      ],
+      "popularity": 80,
+      "notes": "Wednesdays; check days"
+    },
+    {
+      "name": "Chapora Fort",
+      "tags": [
+        "history",
+        "photography"
+      ],
+      "popularity": 82,
+      "notes": "Sunset views"
+    },
+    {
+      "name": "Basilica of Bom Jesus",
+      "tags": [
+        "history",
+        "architecture",
+        "temples"
+      ],
+      "popularity": 88,
+      "notes": "UNESCO site"
+    },
+    {
+      "name": "Dudhsagar Falls",
+      "tags": [
+        "waterfalls",
+        "nature",
+        "adventure"
+      ],
+      "popularity": 91,
+      "notes": "Day trip; early start"
+    }
+  ],
+  "Jaipur": [
+    {
+      "name": "Amber Fort",
+      "tags": [
+        "history",
+        "architecture"
+      ],
+      "popularity": 96,
+      "notes": "Hilltop fort & palace"
+    },
+    {
+      "name": "Hawa Mahal",
+      "tags": [
+        "architecture",
+        "photography"
+      ],
+      "popularity": 90,
+      "notes": "Iconic façade"
+    },
+    {
+      "name": "City Palace",
+      "tags": [
+        "history",
+        "museums"
+      ],
+      "popularity": 88,
+      "notes": "Royal residence"
+    },
+    {
+      "name": "Jantar Mantar",
+      "tags": [
+        "museums",
+        "history"
+      ],
+      "popularity": 85,
+      "notes": "Astronomical instruments"
+    },
+    {
+      "name": "Johari Bazaar",
+      "tags": [
+        "shopping"
+      ],
+      "popularity": 82,
+      "notes": "Jewellery & textiles"
+    },
+    {
+      "name": "Nahargarh Fort",
+      "tags": [
+        "history",
+        "views"
+      ],
+      "popularity": 84,
+      "notes": "Sunset point"
+    }
+  ],
+  "Manali": [
+    {
+      "name": "Hadimba Temple",
+      "tags": [
+        "temples",
+        "architecture"
+      ],
+      "popularity": 90,
+      "notes": "Cedar forest surroundings"
+    },
+    {
+      "name": "Solang Valley",
+      "tags": [
+        "adventure",
+        "nature"
+      ],
+      "popularity": 92,
+      "notes": "Cable car & activities"
+    },
+    {
+      "name": "Old Manali",
+      "tags": [
+        "cafes",
+        "shopping"
+      ],
+      "popularity": 85,
+      "notes": "Cafes & vibe"
+    },
+    {
+      "name": "Manu Temple",
+      "tags": [
+        "temples",
+        "history"
+      ],
+      "popularity": 80,
+      "notes": "Steep walk"
+    },
+    {
+      "name": "Vashisht Hot Springs",
+      "tags": [
+        "nature",
+        "relax"
+      ],
+      "popularity": 82,
+      "notes": "Hot water baths"
+    }
+  ],
+  "Singapore": [
+    {
+      "name": "Marina Bay Sands",
+      "tags": [
+        "architecture",
+        "views"
+      ],
+      "popularity": 95,
+      "notes": "Light & water show"
+    },
+    {
+      "name": "Gardens by the Bay",
+      "tags": [
+        "nature",
+        "architecture"
+      ],
+      "popularity": 94,
+      "notes": "Supertree Grove"
+    },
+    {
+      "name": "Sentosa Island",
+      "tags": [
+        "beach",
+        "adventure"
+      ],
+      "popularity": 90,
+      "notes": "Universal Studios option"
+    },
+    {
+      "name": "Chinatown",
+      "tags": [
+        "food",
+        "history",
+        "shopping"
+      ],
+      "popularity": 85,
+      "notes": "Hawker centres"
+    },
+    {
+      "name": "Little India",
+      "tags": [
+        "food",
+        "culture"
+      ],
+      "popularity": 83,
+      "notes": "Must-try hawker food"
+    }
+  ]
+}
