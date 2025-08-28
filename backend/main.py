@@ -99,14 +99,14 @@ def api_country(name: str):
 def api_holidays(code: str, year: int):
     return {"mode": TOOL_MODE, "holidays": get_public_holidays(code, year)}
 
-from .session_api import router as session_router
+from session_api import router as session_router
 app.include_router(session_router)
 from .telemetry import init_telemetry_db, record_event, query_metrics
 init_telemetry_db()
 
 
 from fastapi.responses import FileResponse, JSONResponse
-from .models import get_latest_plan, get_messages
+from models import get_latest_plan, get_messages
 from fpdf import FPDF
 import os, io, tempfile
 
