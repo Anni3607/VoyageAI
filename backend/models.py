@@ -1,4 +1,3 @@
-
 from sqlmodel import SQLModel, Field, create_engine, Session, select
 from typing import Optional
 from datetime import datetime
@@ -42,15 +41,19 @@ def create_session() -> str:
 
 def add_message(session_id: str, role: str, text: str, meta: dict = None):
     with Session(engine) as db:
+        # Add the new message
         m = Message(session_id=session_id, role=role, text=text, meta=json.dumps(meta) if meta else None)
         db.add(m)
-        db.commit()
-        db.refresh(m)
-        # update last_active on session
+
+        # Update the session's last_active time
         q = db.exec(select(ChatSession).where(ChatSession.id == session_id)).one()
         q.last_active = datetime.utcnow()
-        db.add(q)
+        db.add(q) # Mark the object for an update
+
+        # Commit all changes at once
         db.commit()
+
+        db.refresh(m) # Ensures the 'm' object's ID is loaded
     return m.id
 
 def save_plan(session_id: str, plan: dict):
