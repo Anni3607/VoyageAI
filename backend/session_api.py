@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, HTTPException
 from sqlmodel import Session as SQLSession
 from models import init_db, create_session, add_message, save_plan, get_latest_plan, get_messages
@@ -16,6 +15,7 @@ llm = LLMWrapper()
 def new_session(initial_text: str = None):
     sid = create_session()
     if initial_text:
+        # Ensure that the initial message, if any, is added with a dictionary meta or None
         add_message(sid, "user", initial_text, meta=None)
     return {"session_id": sid}
 
@@ -31,9 +31,19 @@ def session_message(session_id: str, payload: dict):
     text = payload.get("text","").strip()
     if not text:
         raise HTTPException(status_code=400, detail="text required")
-    # store user message
+
+    # Call nlu_parse
     nlu = nlu_parse(text)
+    
+    # Check if nlu is a valid dictionary.
+    # This prevents the previous AttributeError if nlu_parse returned a string.
+    if not isinstance(nlu, dict):
+        add_message(session_id, "assistant", "I'm sorry, an internal error occurred while processing your request.", meta={"type": "error"})
+        raise HTTPException(status_code=500, detail="NLU parsing failed.")
+    
+    # store user message
     add_message(session_id, "user", text, meta=nlu)
+    
     # try planning if intent is plan_trip
     if nlu.get("intent") == "plan_trip":
         plan = plan_itinerary(nlu)
