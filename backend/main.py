@@ -101,7 +101,7 @@ def api_holidays(code: str, year: int):
 
 from session_api import router as session_router
 app.include_router(session_router)
-from .telemetry import init_telemetry_db, record_event, query_metrics
+from telemetry import init_telemetry_db, record_event, query_metrics
 init_telemetry_db()
 
 
