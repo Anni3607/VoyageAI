@@ -1,10 +1,9 @@
-
 import streamlit as st
 import requests, os
 from datetime import datetime
 
 st.set_page_config(page_title="VoyagerAI — Chat Planner", layout="centered")
-st.title("🌍 VoyagerAI — Smart Travel Planner (Chat)")
+st.title("VoyageAI — Smart Travel Planner :)")
 
 BACKEND_URL = os.getenv("BACKEND_URL","https://voyageai-9.onrender.com")
 
@@ -36,8 +35,8 @@ with placeholder.container():
     with col2:
         if st.button("New Chat"):
             new_session()
-            st.experimental_rerun()
-
+            st.rerun() # <-- This line was changed
+    
     if st.button("Send"):
         text = st.session_state.get("input_text","").strip()
         if text:
