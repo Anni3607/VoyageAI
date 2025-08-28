@@ -16,7 +16,7 @@ class TelemetryEvent(SQLModel, table=True):
     latency_ms: int
     status_code: int
     note: Optional[str] = None
-    metadata: Optional[str] = None
+    extra_info: Optional[str] = None
 
 def init_telemetry_db():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
