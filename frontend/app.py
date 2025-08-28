@@ -6,7 +6,7 @@ from datetime import datetime
 st.set_page_config(page_title="VoyagerAI — Chat Planner", layout="centered")
 st.title("🌍 VoyagerAI — Smart Travel Planner (Chat)")
 
-BACKEND_URL = st.secrets.get("BACKEND_URL", os.getenv("BACKEND_URL","http://127.0.0.1:8000"))
+BACKEND_URL = st.secrets.get("BACKEND_URL", os.getenv("BACKEND_URL","https://voyageai-9.onrender.com"))
 
 # session management
 if "session_id" not in st.session_state:
