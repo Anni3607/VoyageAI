@@ -1,96 +1,77 @@
+import os
+import requests
 import streamlit as st
-import requests, os
-from datetime import datetime
 
-st.set_page_config(page_title="VoyagerAI — Chat Planner", layout="centered")
-st.title("VoyageAI — Smart Travel Planner :)")
+# Configure the page title and layout
+st.set_page_config(page_title="VoyagerAI - Smart Travel Planner", layout="wide")
 
-BACKEND_URL = os.getenv("BACKEND_URL","https://voyageai-9.onrender.com")
+# Get the backend URL from environment variables directly.
+# This is a robust way to handle environment variables on platforms like Render.
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
-# session management
+# Session state initialization
 if "session_id" not in st.session_state:
     st.session_state.session_id = None
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-def new_session(initial_text=None):
-    r = requests.post(f"{BACKEND_URL}/session/new", json={"initial_text": initial_text} if initial_text else {})
-    sid = r.json().get("session_id")
-    st.session_state.session_id = sid
-    st.session_state.messages = []
-    return sid
+def new_session():
+    """Starts a new chat session by clearing history and getting a new session ID from backend."""
+    st.session_state.chat_history = []
+    try:
+        # Use the correct endpoint for a new session
+        r = requests.post(f"{BACKEND_URL}/session/new")
+        r.raise_for_status()
+        st.session_state.session_id = r.json().get("session_id")
+        # In Streamlit, st.experimental_rerun() is used to force a refresh.
+        # This can be replaced with st.rerun() in newer versions of Streamlit.
+        st.experimental_rerun()
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error creating new session: {e}")
+        st.session_state.session_id = None
 
 def send_message(text):
-    sid = st.session_state.session_id or new_session()
-    payload = {"text": text}
-    r = requests.post(f"{BACKEND_URL}/session/{sid}/message", json=payload, timeout=60)
-    return r.json()
+    """Sends a message to the backend and appends the response to the chat history."""
+    if st.session_state.session_id:
+        try:
+            r = requests.post(
+                f"{BACKEND_URL}/session/{st.session_state.session_id}",
+                json={"prompt": text}
+            )
+            r.raise_for_status()
+            response_data = r.json()
+            st.session_state.chat_history.append({"role": "user", "content": text})
+            st.session_state.chat_history.append({"role": "VoyagerAI", "content": response_data.get("message")})
+            st.experimental_rerun()
+        except requests.exceptions.RequestException as e:
+            st.error(f"Error sending message: {e}")
+            st.session_state.chat_history.append({"role": "user", "content": text})
+            st.session_state.chat_history.append({"role": "VoyagerAI", "content": f"Error: {e}"})
 
-# UI
-placeholder = st.empty()
-with placeholder.container():
-    col1, col2 = st.columns([3,1])
-    with col1:
-        user_input = st.text_input("You:", key="input_text", placeholder="E.g., Plan a 3-day Goa trip from Mumbai under ₹20000 in October")
-    with col2:
-        if st.button("New Chat"):
-            new_session()
-            st.rerun() # <-- This line was changed
-    
-    if st.button("Send"):
-        text = st.session_state.get("input_text","").strip()
-        if text:
-            resp = send_message(text)
-            # append user
-            st.session_state.messages.append({"role":"user","text":text})
-            # assistant
-            assistant = resp.get("assistant","(no reply)")
-            st.session_state.messages.append({"role":"assistant","text":assistant})
-            # if plan returned, show plan summary
-            plan = resp.get("plan")
-            if plan and plan.get("status")=="ok":
-                st.session_state.latest_plan = plan
+# Main app UI
+st.title("VoyagerAI — Smart Travel Planner :)")
 
-    # render messages
-    for m in st.session_state.messages:
-        if m["role"]=="user":
-            st.markdown(f"**You:** {m['text']}")
-        else:
-            st.markdown(f"**VoyagerAI:** {m['text']}")
+# Layout for input and buttons
+input_col, new_chat_col = st.columns([4, 1])
 
-# If a plan exists (either from state or fetch)
-plan = st.session_state.get("latest_plan", None)
-if not plan and st.session_state.session_id:
-    try:
-        r = requests.get(f"{BACKEND_URL}/session/{st.session_state.session_id}/plan", timeout=3)
-        if r.status_code == 200:
-            plan = r.json().get("plan")
-            st.session_state.latest_plan = plan
-    except Exception:
-        pass
+with input_col:
+    user_input = st.text_input("You:", placeholder="plan a 3 day tour to Goa from mumbai in october", key="user_input")
 
-if plan:
-    st.markdown("### Generated Itinerary")
-    s = plan.get("summary",{})
-    st.markdown(f"**{s.get('destination','')}** | {s.get('start_date','')} → {s.get('end_date','')} | **{s.get('n_days','')} days**")
-    st.markdown(f"**Est. Cost:** ₹{s.get('est_cost_inr','')} — {s.get('notes','')}")
-    for d in plan.get("days",[]):
-        st.markdown(f"**{d.get('date')}**")
-        for it in d.get("items",[]):
-            st.write(f"- `{it.get('time')}` — **{it.get('name')}** ({it.get('category')})  \n  {it.get('notes','')}")
-    st.markdown("#### Export")
-    colx, coly = st.columns(2)
-    with colx:
-        if st.button("Download Markdown"):
-            r = requests.get(f"{BACKEND_URL}/export/{st.session_state.session_id}?fmt=md", stream=True)
-            if r.status_code == 200:
-                st.download_button("Download .md", r.content, file_name=f"itinerary_{st.session_state.session_id}.md", mime="text/markdown")
-            else:
-                st.error("Export failed.")
-    with coly:
-        if st.button("Download PDF"):
-            r = requests.get(f"{BACKEND_URL}/export/{st.session_state.session_id}?fmt=pdf", stream=True)
-            if r.status_code == 200:
-                st.download_button("Download .pdf", r.content, file_name=f"itinerary_{st.session_state.session_id}.pdf", mime="application/pdf")
-            else:
-                st.error("Export failed.")
+with new_chat_col:
+    st.write("") # Add some space
+    if st.button("New Chat"):
+        new_session()
+
+if st.button("Send"):
+    if user_input:
+        send_message(user_input)
+
+# Display chat history
+for message in st.session_state.chat_history:
+    with st.chat_message(message["role"]):
+        st.write(message["content"])
+
+# Automatically start a new session on page load if one doesn't exist.
+if st.session_state.session_id is None:
+    st.info("Creating a new chat session...")
+    new_session()
