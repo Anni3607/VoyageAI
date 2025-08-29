@@ -23,9 +23,8 @@ def new_session():
         r = requests.post(f"{BACKEND_URL}/session/new")
         r.raise_for_status()
         st.session_state.session_id = r.json().get("session_id")
-        # In Streamlit, st.experimental_rerun() is used to force a refresh.
-        # This can be replaced with st.rerun() in newer versions of Streamlit.
-        st.experimental_rerun()
+        # Use st.rerun() which is the modern replacement for st.experimental_rerun()
+        st.rerun()
     except requests.exceptions.RequestException as e:
         st.error(f"Error creating new session: {e}")
         st.session_state.session_id = None
@@ -42,7 +41,8 @@ def send_message(text):
             response_data = r.json()
             st.session_state.chat_history.append({"role": "user", "content": text})
             st.session_state.chat_history.append({"role": "VoyagerAI", "content": response_data.get("message")})
-            st.experimental_rerun()
+            # Use st.rerun() which is the modern replacement for st.experimental_rerun()
+            st.rerun()
         except requests.exceptions.RequestException as e:
             st.error(f"Error sending message: {e}")
             st.session_state.chat_history.append({"role": "user", "content": text})
